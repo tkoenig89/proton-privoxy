@@ -5,19 +5,19 @@ Docker container for setting up a [Privoxy](https://www.privoxy.org/) proxy that
 
 Build Docker image:
 ```
-docker build -t walt3rl/proton-privoxy .
+docker build -t tkoe/proton-privoxy .
 ```
 
 Run Docker container:
 
 ```
 docker run -d \
-     --device=/dev/net/tun --cap-add=NET_ADMIN \
+     --cap-add=NET_ADMIN \
      -v /etc/localtime:/etc/localtime:ro \
      -p 8888:8080 \
      -e PVPN_USERNAME=my_protonvpn_openvpn_username \
      -e PVPN_PASSWORD=my_protonvpn_openvpn_password \
-     --name proton-privoxy walt3rl/proton-privoxy
+     --name proton-privoxy tkoe/proton-privoxy
 ```
 
 Or with this `docker-compose.yml`:
@@ -27,7 +27,7 @@ Or with this `docker-compose.yml`:
 version: "3"
 services:
   proton-privoxy:
-    image: walt3rl/proton-privoxy
+    image: tkoe/proton-privoxy
     container_name: proton-privoxy
     environment:
       - PVPN_USERNAME=xxxxxxxxxxxxxxxxxxxxxxxx
@@ -37,8 +37,6 @@ services:
     ports:
       - 8888:8080
     restart: unless-stopped
-    devices:
-      - /dev/net/tun
     cap_add:
       - NET_ADMIN
 ```
