@@ -10,7 +10,7 @@ docker build -t tkoe/proton-privoxy .
 
 Run Docker container:
 
-```
+``` bash
 docker run -d \
      --cap-add=NET_ADMIN \
      -v /etc/localtime:/etc/localtime:ro \
@@ -18,6 +18,23 @@ docker run -d \
      -e PVPN_USERNAME=my_protonvpn_openvpn_username \
      -e PVPN_PASSWORD=my_protonvpn_openvpn_password \
      --name proton-privoxy tkoe/proton-privoxy
+```
+
+Run as Service (with secrets)
+
+```bash
+docker service create \
+  --name proton-privoxy \
+  --replicas 1 \
+  --mount type=bind,source=/etc/localtime,destination=/etc/localtime,ro \
+  -p 8888:8080 \
+  --secret PROTONVPN_USERNAME \
+  --secret PROTONVPN_PASSWORD \
+  -e PVPN_USERNAME_FILE="/run/secrets/PROTONVPN_USERNAME" \
+  -e PVPN_PASSWORD_FILE="/run/secrets/PROTONVPN_PASSWORD" \
+  --cap-add NET_ADMIN \
+  tkoe/proton-privoxy
+
 ```
 
 Or with this `docker-compose.yml`:
